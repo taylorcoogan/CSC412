@@ -1,0 +1,75 @@
+#!/bin/bash
+
+
+
+#if statements handling errors
+echo " "
+#checks if less than 3 arguments
+	if [ "$#" -lt 3 ]; then
+		echo "Less than three arguments are provided to the script" >&2
+	exit
+	fi
+
+#checks if more than 3 arguments
+	if [ $# -gt 3 ]; then 
+		echo "Greater than three arguments are provided to the script" >&2
+	exit
+	fi 
+
+#checks if target file exists
+	if [ ! -e $1 ]; then
+		echo "The target text file does not exist" >&2
+	exit
+	fi 
+
+#just checking the values for debugging
+
+	
+	echo "Target file: 		$1"
+	echo "Destination: 		$2"
+	echo "Number of Replications Desired: $3" 
+
+#now need to check if folder exists, 
+#if it doesn't we create it
+	echo " " 
+	if [ ! -d "$2" ]; then
+		mkdir "$2"
+
+# (original, not in use) if it does, we delete it and remake folder
+#################
+	##else 
+	##	sudo rm -r "$2"
+	##	mkdir "$2"
+	##fi
+#################
+
+# NEW code for deleting files not directory
+	else 
+		echo "THIS WILL DELETE ALL FILES IN $2"
+		read -n 1 -s -p "Press any key to continue:"
+		echo " "
+		sudo find $2 -type f -exec rm -fv {} \; #finds files in directory force deletes and prints to terminal
+	
+	fi
+
+#################
+#get file name from path to use for naming copies
+	filepath="$1"
+#sets filename to file name
+	filename=$(basename "$filepath" ".txt")
+#prints file name (for debugging)
+	#echo " "
+	#echo "File Name: 		$filename"
+
+#while statement to print appropriate number of copies
+	SUCCESSES=0
+	COUNTER=$3
+	while [ $COUNTER -gt 0 ]; 
+	do
+		sudo cp -p $1 "$2/"$filename"_copy_"$COUNTER""
+		let COUNTER=COUNTER-1
+		let SUCCESSES++
+	done
+		echo " "
+		echo "Successful Replications of $filename: $SUCCESSES"
+	exit
