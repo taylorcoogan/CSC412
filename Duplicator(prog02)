@@ -1,0 +1,82 @@
+// Taylor Coogan
+// CSC412 PROG03
+// File Duplicator 
+// Given Source File and Output Directory
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<sys/stat.h>
+#include<regex.h>
+#include<dirent.h>
+#include<string.h>
+
+
+/* main function that takes argc and argz array */
+/* argc = number of arguments as integer*/
+/* argz[] = array of arguments passed through command line, [0] being duplicator file, [1] being first arg, etc... */
+
+int main(int argc, char *argv[] ) 
+{
+	if ( argc =! 3) { printf("WRONG"); exit(-1); }
+
+	//extra credit
+	//Doesn't work so I commented this all out.  This is what I tried to do
+	/* 
+	DIR* dir = opendir(argv[2]);
+	if (dir) {
+	
+	
+
+	char* archive = strcat(argv[2], "_Archive");
+	char *path_name = argv[2];
+	DIR* dira = opendir(archive);
+	if (!dira){	
+		rename(argv[2], archive);
+		}
+	} 
+	*/
+
+		// Now we need to create the folder that the user wants 
+		// Format for mkdir command is ("folder name", permissions) will use 0777 for highest permissions
+		// So we use argv as file name 
+	
+	int folder = mkdir(argv[2], 0777);
+	
+		// now we want to concatenate the strings to make path
+		
+	char path[100];				
+	
+		//use sprintf function to create file path concatenation
+		//two char strings (%s) formatted %s/%s followed by respective 			//char strings
+
+	sprintf(path, "%s/%s", argv[2], argv[1]);
+	
+		//we need to get file to copy
+		//will use type FILE
+		//opens input file and sets it to source as type FILE
+
+	FILE *source = fopen(argv[1], "r"); //reading only so "r"
+
+		//we also need to create a file to put in dest folder for copying
+		//Now that we have a working path, we can open from there
+
+	FILE *dest = fopen(path, "w");	//now we are writing so "w"
+					//writes from path to new file dest
+
+		// Now we will copy each line from the source file into the dest file
+		// Got this idea from a classmate
+		// we loop to write each line to new file in dest folder
+		// fgets function gets the line from source, fputs puts it in temp variable
+
+	char temp [100];				// temp variable to store line in loop
+	while (fgets(temp, 100, source) != NULL) {	// check if source line is empty/if finished copying
+		fputs(temp, dest);			// if not done, copy line into dest file
+	} 
+	
+		// now we close the files because apparently it can cause problems to leave them open
+
+	fclose(source);
+	fclose(dest);
+
+ 	/////////////////////////////////
+}
