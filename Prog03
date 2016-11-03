@@ -1,0 +1,19 @@
+#!/bin/bash
+
+gcc Duplicator.c -o Duplicator 		#complies C file
+chmod +x Duplicator			#executable permissions
+
+string=$1				#input string
+out=$2					#output directory
+	
+all_files=($(grep -rli "$string" . )) 	#finds files containing string, recursive, ignores case, returns file name(s)
+echo "$all_files"
+	
+
+for each_file in "${all_files[@]}"	#gets each file in "array" and runs it through Duplicator until done
+do
+	./Duplicator "$each_file" "$out"
+	echo "we did it"
+done
+
+	 
